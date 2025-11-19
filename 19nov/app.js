@@ -1,12 +1,22 @@
-//inicializamos express(*)
-const usuarios = require('./mockedData.js')
+//inicializamos express y cors(*)
 const express = require("express");
+const cors = require("cors");
+const { usuarios } = require("./mockedData");
 
 
 //creamos aplicacion con express (app como servidor que creamos)(*)
 const app = express();
 //middleware para que analize las solicitudes deJSON (*)
 app.use(express.json());
+
+//CORS INSTALL npm i cors
+
+app.use(
+    cors({
+        origin: "http://localhost:5173",
+        methods:["GET", "POST", "OPTIONS"],
+        allowedHeaders:["Content-Type"],
+}))
 
 //rutas
 //endpoint principal o raiz
@@ -37,6 +47,7 @@ app.get('/info', (req, res) => {
 app.post('/login', (req, res) => {
     // obtengo email y pass desde mi front
     const {email, pass} = req.body;
+    console.log(email, pass);
 
     //busco dentro de mi array de usuarios si encuentro el que me ha llegado
     const usuario = usuarios.find(
@@ -76,4 +87,5 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT} y tal...`);
 });
+
 

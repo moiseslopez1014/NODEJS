@@ -1,4 +1,4 @@
-export const usuarios = [
+const usuarios = [
   {
     name: "Alejandro García",
     age: 45,
@@ -56,3 +56,7 @@ export const usuarios = [
     role: "user",
   },
 ];
+
+module.exports = {
+  usuarios
+}
