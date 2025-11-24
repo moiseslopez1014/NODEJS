@@ -4,6 +4,8 @@ const cors = require("cors");
 const connectToDataBase = require("./src/db/connectDB");
 const userRouter = require("./src/routers/userRoutes");
 const movieRouter = require("./src/routers/moviesRouter")
+const userRouter2 = require("./src/routers/userRoutes2");
+
 
 //puerto para usar(*)
 const PORT = Number(process.env.PORT) || 3000; // || 3000 como buena practica para usar un puerto por defecto
@@ -30,10 +32,14 @@ server.get('/', (req, res) => {
     res.send('Hola, papo')
 })
 //router for user
-server.use("/api/users", userRouter);
+//server.use("/api/users", userRouter);
 
 //router for movies
 server.use("/api/movies", movieRouter);
+
+//ejercicios
+
+server.use("/api/users", userRouter2);
 
 
 
