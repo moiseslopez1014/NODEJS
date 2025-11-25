@@ -29,6 +29,10 @@ const userSchema = new Schema({
         type: String,
         enum: ["user", "admin"],
         default: "user",
+    },
+    favorites: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Movie"
     }
 });
 

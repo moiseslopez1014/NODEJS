@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const movieModel = require("../models/movieModel");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -84,10 +85,43 @@ const editUserById = async (req, res) => {
   }
 };
 
+const addFavoriteMovie = async (req, res) => {
+  try {
+    const { idUser, idMovie } = req.params;
+
+    //user
+    const user = await userModel.findById(idUser);
+
+    if (!user) {
+      return res.status(200).send("El usuario no se ha encontrado");
+    }
+
+    //movie
+    const movie = await movieModel.findById(idMovie);
+
+    if (!movie) {
+      return res.status(200).send("La pelicula no se ha encontrado");
+    }
+
+    if (user.favorites.includes(idMovie)) return res.status(200).send("La pelicula ya esta en favoritos");
+
+
+    user.favorites.push(idMovie);
+    user.save();
+    res.status(200).send({status: "success",
+      data: user} )
+
+      
+  } catch (error) {
+    res.status(500).send({ status: "Failed", error: error.message });
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   insertNewUser,
   deleteUserById,
-  editUserById
+  editUserById,
+  addFavoriteMovie,
 };

@@ -8,7 +8,8 @@ const {
   getUserById,
   insertNewUser,
   deleteUserById,
-  editUserById
+  editUserById,
+  addFavoriteMovie
 } = require("../controllers/userController");
 
 // Ruta para obtener todos los usuarios
@@ -21,6 +22,9 @@ router.post("/", insertNewUser);
 router.patch("/edit/:idUser", editUserById)
 // Ruta para eliminar un usuario
 router.delete("/delete/:idUser", deleteUserById);
+
+//ruta para anadir una peli favorita
+router.patch("/:idUser/favorites/:idMovie", addFavoriteMovie);
 
 // Esta linea siempre.Exportamos el router
 module.exports = router;
