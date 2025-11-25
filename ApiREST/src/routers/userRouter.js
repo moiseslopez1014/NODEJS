@@ -9,13 +9,17 @@ const {
   insertNewUser,
   deleteUserById,
   editUserById,
-  addFavoriteMovie
+  addFavoriteMovie,
+  removeFavoriteMovie,
+  searchUserByName
 } = require("../controllers/userController");
 
 // Ruta para obtener todos los usuarios
 router.get("/", getAllUsers);
 // Ruta para obtener usuario por id
 router.get("/:idUser", getUserById);
+
+router.get("/searchName/:userName", searchUserByName);
 // Ruta para crear usuario
 router.post("/", insertNewUser);
 // Ruta para editar un usuario
@@ -25,6 +29,7 @@ router.delete("/delete/:idUser", deleteUserById);
 
 //ruta para anadir una peli favorita
 router.patch("/:idUser/favorites/:idMovie", addFavoriteMovie);
+router.delete("/:idUser/favorites/:idMovie", removeFavoriteMovie);
 
 // Esta linea siempre.Exportamos el router
 module.exports = router;
