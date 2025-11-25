@@ -103,21 +103,16 @@ const addFavoriteMovie = async (req, res) => {
       return res.status(200).send("La pelicula no se ha encontrado");
     }
 
-    if (user.favorites.includes(idMovie)) return res.status(200).send("La pelicula ya esta en favoritos");
-
+    if (user.favorites.includes(idMovie))
+      return res.status(200).send("La pelicula ya esta en favoritos");
 
     user.favorites.push(idMovie);
     user.save();
-    res.status(200).send({status: "success",
-      data: user} )
-
-      
+    res.status(200).send({ status: "success", data: user });
   } catch (error) {
     res.status(500).send({ status: "Failed", error: error.message });
   }
 };
-
-
 
 const removeFavoriteMovie = async (req, res) => {
   try {
@@ -137,33 +132,32 @@ const removeFavoriteMovie = async (req, res) => {
       return res.status(200).send("La pelicula no se ha encontrado");
     }
 
-    if (!user.favorites.includes(idMovie)) return res.status(200).send("La pelicula no se ha encontrado en favoritos");
-
+    if (!user.favorites.includes(idMovie))
+      return res
+        .status(200)
+        .send("La pelicula no se ha encontrado en favoritos");
 
     user.favorites.pull(idMovie);
     user.save();
-    res.status(200).send({status: "success",
-      data: user} )
-
-      
+    res.status(200).send({ status: "success", data: user });
   } catch (error) {
     res.status(500).send({ status: "Failed", error: error.message });
   }
 };
 
-
-const searchUserByName = async (req,res) => {
-try {
-  const { userName } = req.params;
-  const users = await userModel.find({
-    name: { $regex: userName, $options: "i" } //que no distinga mayus
-  })
-  if (users.length === 0) return res.status(200).send("no se encontraron usuarios");
-  res.status(200).send({status: "Success", data: users})
-} catch (error) {
-  res.status(500).send({ status: "Failed", error: error.message });
-}
-}
+const searchUserByName = async (req, res) => {
+  try {
+    const { userName } = req.params;
+    const users = await userModel.find({
+      name: { $regex: userName, $options: "i" }, //que no distinga mayus
+    });
+    if (users.length === 0)
+      return res.status(200).send("no se encontraron usuarios");
+    res.status(200).send({ status: "Success", data: users });
+  } catch (error) {
+    res.status(500).send({ status: "Failed", error: error.message });
+  }
+};
 
 module.exports = {
   getAllUsers,
@@ -173,5 +167,5 @@ module.exports = {
   editUserById,
   addFavoriteMovie,
   removeFavoriteMovie,
-  searchUserByName
+  searchUserByName,
 };

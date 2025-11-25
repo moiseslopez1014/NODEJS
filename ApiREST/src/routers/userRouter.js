@@ -11,7 +11,7 @@ const {
   editUserById,
   addFavoriteMovie,
   removeFavoriteMovie,
-  searchUserByName
+  searchUserByName,
 } = require("../controllers/userController");
 
 // Ruta para obtener todos los usuarios
@@ -23,7 +23,7 @@ router.get("/searchName/:userName", searchUserByName);
 // Ruta para crear usuario
 router.post("/", insertNewUser);
 // Ruta para editar un usuario
-router.patch("/edit/:idUser", editUserById)
+router.patch("/edit/:idUser", editUserById);
 // Ruta para eliminar un usuario
 router.delete("/delete/:idUser", deleteUserById);
 
