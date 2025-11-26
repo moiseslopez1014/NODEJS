@@ -1,6 +1,22 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const commentSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+  comment: {
+    type: String,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
 const movieSchema = new Schema({
   title: {
     type: String,
@@ -11,7 +27,7 @@ const movieSchema = new Schema({
     required: [true, "descripcion necesaria"],
   },
   category: {
-    type: String,
+    type: [String],
     required: [true, "categoria necesaria"],
   },
   director: {
@@ -38,6 +54,11 @@ const movieSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  comments: [ commentSchema ],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 const movieModel = mongoose.model("Movie", movieSchema, "movies");

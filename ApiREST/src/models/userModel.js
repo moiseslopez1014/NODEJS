@@ -34,6 +34,10 @@ const userSchema = new Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: "Movie",
   },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 });
 
 /* Creamos la constante para exportarla y poder usarla

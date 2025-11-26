@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
+const generateToken = require("../utils/authToken");
 
 const BCRYPT_ROUNDS = Number(process.env.BCRYPT_ROUNDS || 10);
 
@@ -14,18 +15,14 @@ const signup = async (req, res) => {
     };
     const user = await userModel.create(newUser);
     if (!user)
-      return res
-        .status(400)
-        .send({
-          status: "Failed",
-          message: "No se ha podido crear el usuario",
-        });
-    res
-      .status(200)
-      .send({
-        status: "Success",
-        message: "Se ha podido crear el usuario correctamente",
+      return res.status(400).send({
+        status: "Failed",
+        message: "No se ha podido crear el usuario",
       });
+    res.status(200).send({
+      status: "Success",
+      message: "Se ha podido crear el usuario correctamente",
+    });
   } catch (error) {
     res.status(500).send({ status: "Failed", error: error.message });
   }
@@ -33,7 +30,48 @@ const signup = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    res.send("perfecto");
+    const { email, password } = req.body;
+    const user = await userModel
+      .findOne({
+        email: email,
+      })
+      .select("name lastName email password role isActive"); //que devuelva seleccion sin id con -_id
+    const validatePassword = await bcrypt.compare(password, user.password);
+
+    if (validatePassword === false) {
+      return res.status(401).send("Credenciales incorrectas");
+    }
+    if (!user.isActive) {
+      return res.status(404).send({
+        status: "Failed",
+        message: "El usuario esta deshabilitado, contacte con administracion",
+      });
+    }
+
+    if (!user)
+      return res
+        .status(404)
+        .send({ status: "Failed", message: "contrasena o email. incorrectos" });
+    const returnUser = {
+      name: user.name,
+      lastName: user.lastName,
+      email: user.email,
+      role: user.role,
+    };
+
+    // zona para la creacion del token
+    const payload = {
+      _id: user._id,
+      name: user.name,
+      role: user.role,
+    };
+
+    const token = generateToken(payload, false);
+    const token_refresh = generateToken(payload, true);
+
+    res
+      .status(200)
+      .send({ status: "Success", data: returnUser, token, token_refresh });
   } catch (error) {
     res.status(500).send({ status: "Failed", error: error.message });
   }
